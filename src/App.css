@@ -22,3 +22,173 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+
+
+/* Variables */
+
+/* Layout dimensions */
+:root {
+    --main-margins: 10vw;
+    --top-bar-height: 100px;
+    --content-height: calc(100vh - var(--top-bar-height));
+}
+
+:root {
+    --text: #2a2a2a;
+    --bg: #E1F5C4;
+    --highlight: #FC913A;
+    --highlight-dark: #EDE574;
+    --alt-bg: #F9D423;
+}
+
+
+/*
+    General styling
+*/
+body {
+    background: var(--bg);
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.MainContainer {
+    box-sizing: border-box;
+    font-size: 1.8rem;
+    color: var(--text);
+    padding-left: var(--main-margins);
+    padding-right: var(--main-margins);
+    min-height: var(--content-height);
+}
+
+.MainContainer img {
+  max-width: 100%;
+}
+
+.TitleBar {
+    box-sizing: border-box;
+    padding-left: 10vw;
+    padding-top: 5px;
+    margin-top: 0px;
+    padding-bottom: 5px;
+    /*color: var(--highlight); */
+    color: var(--text);
+    background: var(--alt-bg);
+    border-bottom: 4px solid var(--highlight);
+    box-shadow: inset -30px -30px 50px rgba(0, 0, 0, 0.05);
+    height: var(--top-bar-height);
+
+    /* Grid styling */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 1.8em;
+    align-items: middle;
+}
+
+.TitleBar > h1 {
+    font-size: 1.8em;
+    line-height: 1.1;
+    font-weight: 200;
+    letter-spacing: 1px;
+}
+
+.TitleBar-logo {
+    height: 60px;
+    float: left;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.MainContainer {
+    grid-template-rows: 150px auto;
+    display: grid;
+    min-height: var(--content-height);
+}
+
+
+/*
+    Bar chart styling
+*/
+.BarChart {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 5px;
+    align-items: end;
+    position: relative;
+}
+
+.BarChart-bar {
+    color: --var(--text);
+    height: 100px;
+    font-size: 4vw;
+    transition: transform 0.5s, filter 0.5s;
+    transform: perspective(1000px) translate3d(0px, 1px, 0px);
+    text-align: center;
+}
+
+.BarChart-bar--small {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+.BarChart-bar:nth-child(even) {
+    background-color: var(--highlight);
+}
+
+.BarChart-bar:nth-child(odd) {
+    background-color: var(--highlight-dark);
+}
+
+.BarChart-bar:hover {
+    filter: brightness(1.5);
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    cursor: pointer;
+    transform: perspective(1000px) translate3d(0px, 0px, 100px);
+}
+
+.CurrencyChooser {
+    float: right;
+}
+
+.CurrencyChooser-select {
+    border: 1px solid var(--highlight-dark);
+    background: var(--highlight);
+    padding: 2px;
+}
+
+.CurrencyChooser-select > option {
+    color: var(--text);
+}
+
+
+.CurrencyCheckboxList {
+    display: grid;
+    grid-template-columns: repeat(17, 1fr);
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 5px;
+    align-items: middle;
+}
+
+.CurrencyCheckboxList input[type=checkbox] {
+    display: none;
+}
+
+.CurrencyCheckboxList span {
+    display: block;
+    text-align: center;
+}
+
+.CurrencyCheckboxList input:checked + span {
+    background-color: var(--highlight);
+    color: var(--text);
+    border: 2px solid var(--highlight-dark);
+    box-sizing: border-box;
+}
+
+
