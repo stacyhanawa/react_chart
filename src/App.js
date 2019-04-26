@@ -28,12 +28,22 @@ import './App.css';
 class App extends Component {
   state = {
     apiData: '',
+    baseCurrency: 'EUR',
+    rates: [],
   }
   
   doFetch = () => {
     fetch("https://api.exchangeratesapi.io/latest")
     .then(response => response.json())
     .then(data => {
+    
+        //If baseCurrency is EUR, to get the bar chart to display properly:
+        if (baseCurrency ==="EUR") {
+            this.setState({
+                rates: '1.00',
+            });
+        }
+    
         console.log("got data", data);
         this.setState({
             apiData: data,
@@ -54,7 +64,7 @@ class App extends Component {
             
             <div className="CurrencyChooser">
                 <label>Base currency:
-                    <select className="CurrencyChooser-select" onchange="doFetch()">
+                    <select className="CurrencyChooser-select" onChange="doFetch()">
                         <option value="EUR" selected="selected">EUR</option>
                         <option value="USD">USD</option>
                         <option value="AUD">AUD</option>
