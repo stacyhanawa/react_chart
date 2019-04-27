@@ -13,39 +13,47 @@ class App extends Component {
     ],
     rates: [
     ],
+    selectedCurrency: "EUR",
+    highest: 0,
+  }
+  
+
+  handleChange = (event) => {
+    console.log(event.target.value);
+    this.state.selectedCurrency = event.target.value;
+    this.doFetch();
   }
   
   doFetch = () => {
-    fetch("https://api.exchangeratesapi.io/latest")
+    fetch("https://api.exchangeratesapi.io/latest?base=" + this.state.selectedCurrency)
     .then(response => response.json())
-    .then(data => {
-    
-        //If baseCurrency is EUR, to get the bar chart to display properly:
-        
-    
-        console.log("got data", data);
+    .then(data => {    
+
         this.setState({
             apiData: data,
         });
         
         
-        let highest = 0;
-        
+        this.state.highest = 0;
         for (let currency of this.state.currencies) {
             let rate = data.rates[currency]   
-            if (rate > highest) {
-            highest = rate;
+            if (rate > this.state.highest) {
+            this.state.highest = rate;
             }
         }
         
-        data.rates.EUR = 1.00;
+        if (this.state.selectedCurrency === "EUR") {
+            data.rates.EUR = 1.00;
+        }
+        
         
         let rates = [];
         for (let currency of this.state.currencies) {
 
+            let height = data.rates[currency]/this.state.highest * 100;
             let item =  {
                     currency: currency,
-                    height: data.rates[currency]/highest * 100,
+                    height: height,
                     rate: data.rates[currency],
                 };
                   
@@ -72,10 +80,10 @@ class App extends Component {
             
             <div className="CurrencyChooser">
                 <label>Base currency:
-                    <select className="CurrencyChooser-select" onChange={() => this.doFetch()}>
+                    <select className="CurrencyChooser-select"  onChange={this.handleChange}>
                          {
                             this.state.currencies.map(currency => (
-                                <option value="{currency}">{currency}</option>
+                                <option value={currency}>{currency}</option>
                             ))
                          }
                     </select>
