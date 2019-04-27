@@ -1,27 +1,3 @@
-/*
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
-
-export default App;
-*/
-
 import React, { Component } from 'react';
 import './App.css';
 
@@ -36,26 +12,6 @@ class App extends Component {
         "BRL",
     ],
     rates: [
-        {
-            currency: "EUR",
-            height: 83.4,
-        },
-        {
-            currency: "USD",
-            height: 83.4,
-        },
-        {
-            currency: "AUD",
-            height: 83.4,
-        },
-        {
-            currency: "GBP",
-            height: 83.4,
-        },
-        {
-            currency: "BRL",
-            height: 83.4,
-        },
     ],
   }
   
@@ -64,19 +20,44 @@ class App extends Component {
     .then(response => response.json())
     .then(data => {
     
-        /*If baseCurrency is EUR, to get the bar chart to display properly:
-        if (baseCurrency ==="EUR") {
-            this.setState({
-                rates: '1.00',
-            });
-        }*/
+        //If baseCurrency is EUR, to get the bar chart to display properly:
+        
     
         console.log("got data", data);
         this.setState({
             apiData: data,
         });
+        
+        
+        let highest = 0;
+        
+        for (let currency of this.state.currencies) {
+            let rate = data.rates[currency]   
+            if (rate > highest) {
+            highest = rate;
+            }
+        }
+        
+        data.rates.EUR = 1.00;
+        
+        let rates = [];
+        for (let currency of this.state.currencies) {
+
+            let item =  {
+                    currency: currency,
+                    height: data.rates[currency]/highest * 100,
+                    rate: data.rates[currency],
+                };
+                  
+            rates.push(item);
+        }
+        
+        this.setState({
+            rates: rates
+        }); 
     });
   }
+  
   
   componentDidMount() {
     this.doFetch();
@@ -96,7 +77,7 @@ class App extends Component {
                             this.state.currencies.map(currency => (
                                 <option value="{currency}">{currency}</option>
                             ))
-                        }
+                         }
                     </select>
                 </label>
             </div>
@@ -105,16 +86,15 @@ class App extends Component {
             <div className="CurrencyCheckboxList">
             </div>
             <div className="BarChart">
-              {
+                {
                 this.state.rates.map(rate => (
                   <div 
                     className="BarChart-bar" 
-                    style={{ height: "{rate.height}%" }}>
-                    {rate.currency}
+                    style={{ height: rate.height + "%"}}>
+                    {rate.currency} {rate.rate.toFixed(2)}
                   </div>
                 ))
               }
-              
 
             </div>
         </section>
