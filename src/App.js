@@ -28,8 +28,35 @@ import './App.css';
 class App extends Component {
   state = {
     apiData: '',
-    baseCurrency: 'EUR',
-    rates: [],
+    currencies: [
+        "EUR",
+        "USD",
+        "AUD",
+        "GBP",
+        "BRL",
+    ],
+    rates: [
+        {
+            currency: "EUR",
+            height: 83.4,
+        },
+        {
+            currency: "USD",
+            height: 83.4,
+        },
+        {
+            currency: "AUD",
+            height: 83.4,
+        },
+        {
+            currency: "GBP",
+            height: 83.4,
+        },
+        {
+            currency: "BRL",
+            height: 83.4,
+        },
+    ],
   }
   
   doFetch = () => {
@@ -37,12 +64,12 @@ class App extends Component {
     .then(response => response.json())
     .then(data => {
     
-        //If baseCurrency is EUR, to get the bar chart to display properly:
+        /*If baseCurrency is EUR, to get the bar chart to display properly:
         if (baseCurrency ==="EUR") {
             this.setState({
                 rates: '1.00',
             });
-        }
+        }*/
     
         console.log("got data", data);
         this.setState({
@@ -64,12 +91,12 @@ class App extends Component {
             
             <div className="CurrencyChooser">
                 <label>Base currency:
-                    <select className="CurrencyChooser-select" onChange="doFetch()">
-                        <option value="EUR" selected="selected">EUR</option>
-                        <option value="USD">USD</option>
-                        <option value="AUD">AUD</option>
-                        <option value="GBP">GBP</option>
-                        <option value="BRL">BRL</option>
+                    <select className="CurrencyChooser-select" onChange={() => this.doFetch()}>
+                         {
+                            this.state.currencies.map(currency => (
+                                <option value="{currency}">{currency}</option>
+                            ))
+                        }
                     </select>
                 </label>
             </div>
@@ -78,31 +105,17 @@ class App extends Component {
             <div className="CurrencyCheckboxList">
             </div>
             <div className="BarChart">
-              <div 
-                className="BarChart-bar" 
-                style={{ height: "88.5%" }}>
-                EUR €
-              </div>
-              <div 
-                className="BarChart-bar" 
-                style={{ height: "75.5%" }}>
-                USD $
-              </div>
-              <div 
-                className="BarChart-bar" 
-                style={{ height: "55.9%" }}>
-                AUD $
-              </div>
-              <div 
-                className="BarChart-bar" 
-                style={{ height: "99.8%" }}>
-                GBP £
-              </div>
-              <div 
-                className="BarChart-bar" 
-                style={{ height: "19.4%" }}>
-                BRL R$
-              </div>
+              {
+                this.state.rates.map(rate => (
+                  <div 
+                    className="BarChart-bar" 
+                    style={{ height: "{rate.height}%" }}>
+                    {rate.currency}
+                  </div>
+                ))
+              }
+              
+
             </div>
         </section>
         
